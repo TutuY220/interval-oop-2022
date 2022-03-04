@@ -1,5 +1,7 @@
 package Intervals2;
 
+// First merge the work your partner did, then push
+
 /**
  * 
  * Each instance of this class stores an interval with integer bounds.
@@ -12,19 +14,30 @@ package Intervals2;
 public class Interval {
 
 	//Defining data abstraction
-	//1. define data API (what are the methods (getters, constructors...))
+	//1. Define data API (what are the methods (getters, constructors...))
+	
+	/**
+	 * Representation invariants
+	 * 
+	 * @invar | lowerBound <= upperBound
+	 */
+	
+	private int lowerBound;
+	private int upperBound;
+	
+	//map concrete state to abstract state
 	
 	public int getLowerBound() {
-		throw new IllegalArgumentException("Not yet implement");
+		return lowerBound;
 	}
 	public int getUpperBound() {
-		throw new IllegalArgumentException("Not yet implement");
+		return upperBound;
 	}
 	
 	// If it is mutable, we have to consider also the state
 	
 	public int getLength() {
-		throw new IllegalArgumentException("Not yet implement");
+		return upperBound - lowerBound;
 	}
 	
 	/**
@@ -36,7 +49,11 @@ public class Interval {
 	 * @post | getUpperBound() == upperBound
 	 */
 	public Interval(int lowerBound, int upperBound) {
-		throw new IllegalArgumentException("Not yet implement");
+		if(lowerBound > upperBound) {
+			throw new IllegalArgumentException("upperBound is less than the lowerBound");
+		}
+		this.lowerBound = lowerBound;
+		this.upperBound = upperBound;
 
 	}
 	
@@ -49,6 +66,9 @@ public class Interval {
 	
 	//mutator
 	public void shift(int amount) {
-		throw new IllegalArgumentException("Not yet implement");
+		lowerBound += amount;
+		upperBound += amount;
 	}
+	
+	//abstract state is determined by the return value of the getters
 }
