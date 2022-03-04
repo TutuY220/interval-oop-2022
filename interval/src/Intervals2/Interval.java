@@ -69,7 +69,7 @@ public class Interval {
 		lowerBound += amount;
 		upperBound += amount;
 	}
-	//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
+	//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
 	//abstract state is determined by the return value of the getters
 	
 	
