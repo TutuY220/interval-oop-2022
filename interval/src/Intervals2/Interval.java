@@ -1,7 +1,7 @@
 package Intervals2;
 
 // First merge the work your partner did, then push
-
+// Data abstraction: customer has no idea of your implementation (code)
 /**
  * 
  * Each instance of this class stores an interval with integer bounds.
@@ -69,6 +69,8 @@ public class Interval {
 		lowerBound += amount;
 		upperBound += amount;
 	}
-	
+	//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
 	//abstract state is determined by the return value of the getters
+	
+	
 }
