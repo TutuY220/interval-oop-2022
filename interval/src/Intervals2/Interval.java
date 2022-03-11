@@ -43,7 +43,6 @@ public class Interval {
 	/**
 	 * Initialize this object to store the interval with the given lower bound and upper bound.
 	 * 
-	 * 
 	 * @throws IllegalArgumentException | upperBound < lowerBound
 	 * @post | getLowerBound() == lowerBound
 	 * @post | getUpperBound() == upperBound
