@@ -70,6 +70,4 @@ public class Interval {
 	}
 	//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
 	//abstract state is determined by the return value of the getters
-	
-	
 }
