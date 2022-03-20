@@ -4,7 +4,7 @@ public class BlockState {
 	// TODO: implement
 	//blockTL is the top left point of this block
 	private Point blockTL;
-	//blockBR is the bottom right point of this blocl
+	//blockBR is the bottom right point of this block
 	private Point blockBR;
 	
 	public BlockState() {

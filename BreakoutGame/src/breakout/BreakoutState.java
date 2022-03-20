@@ -1,6 +1,7 @@
 package breakout;
 import java.util.Arrays;
 import java.util.HashMap;
+
 // TODO: implement, document
 public class BreakoutState {
 
@@ -34,10 +35,10 @@ public class BreakoutState {
 			}
 //			System.out.println(block.getBlockTL().getX()/blockXSize);
 		}
-		for(int i = 0; i < 9; i++) {
-			System.out.println(topMargin.get(i));
-			
-		}
+//		for(int i = 0; i < 9; i++) {
+//			System.out.println(topMargin.get(i));
+//			
+//		}
 //		System.out.println(balls[0].getBottomRight().getY());
 	}
 	
@@ -57,59 +58,81 @@ public class BreakoutState {
 		return bottomRight;
 	}
 
-//	This method must do the following (in this order):
-//	- Move all balls one step forward according to their current velocity.
-//	- Check whether any balls hit the walls on the left, right and top side of the game area, in which case they must bounce back.
-//	- Check whether any balls 
-//	hit the bottom of the field, in which case they must be removed from the game.
-//	- Check whether any ball hit any block, in which case the block must be removed from the game and the ball must bounce back.
-//	- Check whether any ball hit the paddle, in which case it must bounce back.
-//	  Additionally, the ball must speed up by one fifth of the current velocity of the paddle.
+	//	This method must do the following (in this order):
+	//	- Move all balls one step forward according to their current velocity.
+	//	- Check whether any balls hit the walls on the left, right and top side of the game area, in which case they must bounce back.
+	//	- Check whether any balls hit the bottom of the field, in which case they must be removed from the game.
+	//	- Check whether any ball hit any block, in which case the block must be removed from the game and the ball must bounce back.
+	//	- Check whether any ball hit the paddle, in which case it must bounce back.
+	//	  Additionally, the ball must speed up by one fifth of the current velocity of the paddle.
 	public void tick(int paddleDir) {
-		Point oldPosition, newPosition;
 		for(BallState ball:balls) {
-//			- Check whether any balls hit the walls on the left, right and top side of the game area, in which case they must bounce back.
-			if(ball.getVelocity().getX()>=0 && ball.getVelocity().getY()>=0) {
-				oldPosition = ball.getCenter();
-				newPosition = ball.getCenter().plus(ball.getVelocity());
-				// xiang you xia yi dong zhi neng peng dao 
-				if(newPosition.getX() >= bottomRight.getX()) {
-					Point bounceBack = new Point(bottomRight.getX()*2-newPosition.getX(),ball.getCenter().getY()+ball.getVelocity().getY());
-					ball.moveTo(bounceBack);
-					ball.setVelocity(ball.getVelocity().mirrorOver(Vector.RIGHT));
-				}
-				else if(newPosition.getY() >= paddle.getCenter().getY() 
-						&& (paddle.getTopLeft().getX()-newPosition.getX())*ball.getVelocity().getY() <= (paddle.getCenter().getY()-newPosition.getY())*ball.getVelocity().getX()) {
-					Point bounceBack = new Point(newPosition.getX(),paddle.getCenter().getY()*2 - newPosition.getY());
-					ball.moveTo(bounceBack);
-					ball.setVelocity(ball.getVelocity().mirrorOver(Vector.UP));
-				}
-//				if(newPosition.getX()/blockXSize < oldPosition.getX()/blockXSize) {
-//					
-//				}
-				else
-					ball.move();
-				
-
-			}else if(ball.getVelocity().getX() < 0 && ball.getVelocity().getY()>=0) {
-				oldPosition = ball.getBottomLeft();
-				newPosition = ball.getBottomLeft().plus(ball.getVelocity());
-				if(newPosition.getX() <= 0) {
-					Point bounceBack = new Point(-newPosition.getX(),ball.getCenter().getY()+ball.getVelocity().getY());
-					ball.moveTo(bounceBack);
-					ball.setVelocity(ball.getVelocity().mirrorOver(Vector.LEFT));
-				}
-				ball.move();
-			}else if(ball.getVelocity().getX() >= 0 && ball.getVelocity().getY() < 0) {
-				oldPosition = ball.getTopRight();
-				newPosition = ball.getTopRight().plus(ball.getVelocity());
-				ball.move();
-			}else {
-				ball.move();
+			ball.move();
+			//			- Check whether any balls hit the walls on the left, right and top side of the game area, in which case they must bounce back.
+			if(ball.getBottomLeft().getX()<=0) {
+				Vector temp = new Vector(ball.getDiameter()/2, ball.getDiameter()/2);
+				ball.moveTo(ball.getTopLeft().reflectVertical(0).plus(temp));
+				ball.setVelocity(ball.getVelocity().mirrorOver(new Vector(-1,0)));
 			}
-			
-		}
-//		blocks = Arrays.stream(blocks).filter(x -> x != null).toArray(BlockState[]::new);
+			else if(ball.getBottomRight().getX()>=bottomRight.getX()) {
+				Vector temp = new Vector(-ball.getDiameter()/2, -ball.getDiameter()/2);
+				ball.moveTo(ball.getBottomRight().reflectVertical(bottomRight.getX()).plus(temp));
+				ball.setVelocity(ball.getVelocity().mirrorOver(new Vector(-1,0)));
+			}
+			else if(ball.getTopLeft().getY()<=0) {
+				Vector temp = new Vector(ball.getDiameter()/2, ball.getDiameter()/2);
+				ball.moveTo(ball.getTopLeft().reflectHorizontal(0).plus(temp));
+				ball.setVelocity(ball.getVelocity().mirrorOver(new Vector(0,1)));
+			}
+			// Check if the ball hit any blocks
+			for(BlockState block : blocks) {
+				if(ball.getBottomRight().isUpAndLeftFrom(block.getBlockBR()) && block.getBlockTL().isUpAndLeftFrom(ball.getBottomRight())) {
+					if(ball.getTopRight().isUpAndLeftFrom(block.getBlockBR()) && block.getBlockTL().isUpAndLeftFrom(ball.getTopRight())) {
+						Vector temp = new Vector(-ball.getDiameter()/2, -ball.getDiameter()/2);
+						ball.moveTo(ball.getBottomRight().reflectVertical(block.getBlockTL().getX()).plus(temp));
+						ball.setVelocity(ball.getVelocity().mirrorOver(new Vector(-1,0)));
+					}
+					else if(ball.getBottomLeft().isUpAndLeftFrom(block.getBlockBR()) && block.getBlockTL().isUpAndLeftFrom(ball.getBottomLeft())){
+						Vector temp = new Vector(-ball.getDiameter()/2, -ball.getDiameter()/2);
+						ball.moveTo(ball.getBottomRight().reflectVertical(block.getBlockTL().getY()).plus(temp));
+						ball.setVelocity(ball.getVelocity().mirrorOver(new Vector(0,1)));
+					}else {
+						ball.setVelocity(ball.getVelocity().mirrorOver(new Vector(1,1)));
+					}
+					block = null;
+				}
+				else if(ball.getTopLeft().isUpAndLeftFrom(block.getBlockBR()) && block.getBlockTL().isUpAndLeftFrom(ball.getTopLeft())) {
+					if(ball.getTopRight().isUpAndLeftFrom(block.getBlockBR()) && block.getBlockTL().isUpAndLeftFrom(ball.getTopRight())) {
+						Vector temp = new Vector(ball.getDiameter()/2, ball.getDiameter()/2);
+						ball.moveTo(ball.getTopLeft().reflectHorizontal(block.getBlockBR().getY()).plus(temp));
+						ball.setVelocity(ball.getVelocity().mirrorOver(new Vector(0,1)));
+					}else if(ball.getBottomLeft().isUpAndLeftFrom(block.getBlockBR()) && block.getBlockTL().isUpAndLeftFrom(ball.getBottomLeft())) {
+						Vector temp = new Vector(ball.getDiameter()/2, ball.getDiameter()/2);
+						ball.moveTo(ball.getTopLeft().reflectVertical(block.getBlockBR().getX()).plus(temp));
+						ball.setVelocity(ball.getVelocity().mirrorOver(Vector.LEFT));
+					}else {
+						ball.setVelocity(ball.getVelocity().mirrorOver(new Vector(1,1)));
+					}
+
+					block=null;
+				}
+				else if(ball.getBottomLeft().isUpAndLeftFrom(block.getBlockBR()) && block.getBlockTL().isUpAndLeftFrom(ball.getBottomLeft())) {
+					ball.setVelocity(ball.getVelocity().mirrorOver(new Vector(1,1)));
+					block=null;
+				}else if(ball.getTopRight().isUpAndLeftFrom(block.getBlockBR()) && block.getBlockTL().isUpAndLeftFrom(ball.getTopRight())) {
+					ball.setVelocity(ball.getVelocity().mirrorOver(new Vector(1,1)));
+					block=null;
+				}
+				}
+			//check paddle
+			if(ball.getBottomLeft().getY()>=paddle.getTopLeft().getY() && ball.getBottomLeft().getX()>=paddle.getTopLeft().getX() && ball.getBottomRight().getX()<=paddle.getBottomRight().getX()
+					&& ball.getTopLeft().getY()<=paddle.getTopLeft().getY()) {
+				Vector temp = new Vector(-ball.getDiameter()/2, -ball.getDiameter()/2);
+				ball.moveTo(ball.getBottomRight().reflectHorizontal(paddle.getTopLeft().getY()).plus(temp));
+				ball.setVelocity(ball.getVelocity().mirrorOver(new Vector(0,1)));
+			}
+			}
+
 	}
 
 	
@@ -134,7 +157,7 @@ public class BreakoutState {
 		for(BallState ball:balls) {
 			if(ball.getBottomRight().getY() < bottomRight.getY()) {
 				flag = false;
-				System.out.println(ball.getBottomRight().getX()+" "+ball.getBottomRight().getY());
+				System.out.println(ball.getTopLeft().getX()+" "+ball.getTopLeft().getY());
 				System.out.println(ball.getVelocity().getX()+" "+ball.getVelocity().getY());
 			}
 				

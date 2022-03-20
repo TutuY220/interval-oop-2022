@@ -10,7 +10,7 @@ public class GameMap {
 	private static final int WIDTH = 50000;
 	private static int BLOCK_LINES = 9;
 	private static int BLOCK_COLUMNS = 10;
-	private static final Vector INIT_BALL_VELOCITY = new Vector(-50,7);
+	private static final Vector INIT_BALL_VELOCITY = new Vector(50,-50);
 
 	private static BlockState createBlock(Point topLeft) {
 		Vector marginBL = new Vector(20,20);
@@ -21,13 +21,15 @@ public class GameMap {
 		BlockState newBlock = new BlockState(blockTL,blockBR);
 		return newBlock;
 	}
+	
 	private static PaddleState createPaddle(Point topLeft) {
-		Vector size = new Vector(WIDTH/BLOCK_COLUMNS/2,HEIGHT/BLOCK_LINES/20);
+		Vector size = new Vector(WIDTH/(BLOCK_COLUMNS*4),HEIGHT/BLOCK_LINES/20);
 		Point center = topLeft.plus(size);
 		// TODO: return a paddle with given center 
 		PaddleState paddle = new PaddleState(size,center);
 		return paddle;
 	}
+	
 	private static BallState createBall(Point topLeft) {
 		Vector centerD = new Vector(WIDTH/BLOCK_COLUMNS/2,HEIGHT/BLOCK_LINES/2);
 		Point center = topLeft.plus(centerD);

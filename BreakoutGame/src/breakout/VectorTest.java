@@ -81,8 +81,8 @@ class VectorTest {
 
 	@Test
 	void testMirrorOver() {
+
 		assertEquals(v00,v00.mirrorOver(Vector.DOWN));
-		assertEquals(new Vector(3,-4),v34.mirrorOver(Vector.DOWN));
 		assertEquals(new Vector(3,-4),v34.mirrorOver(Vector.UP));
 		assertEquals(new Vector(1,8),vm18.mirrorOver(Vector.LEFT));
 	}

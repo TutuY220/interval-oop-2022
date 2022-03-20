@@ -21,8 +21,7 @@ public class TimeOfDay {
 	 *      | 0 <= minutesSinceMidnight && minutesSinceMidnight < 60 * 24
 	 */
 	private int minutesSinceMidnight;
-	private int hours;
-	private int minutes;
+	
 	// 这里必须要有 pre conditions 或者 throw exceptions
 	
 	/**
@@ -57,7 +56,7 @@ public class TimeOfDay {
 	 * 	
 	 *  */
 	public void setHours(int hours) {
-		this.hours = hours;
+		throw new RuntimeException("not yes defined");
 	}
 
 	
@@ -68,7 +67,7 @@ public class TimeOfDay {
 	 * @post | getMinutes() == minutes
 	 */
 	public void setMinutes(int minutes) {
-		this.minutes = minutes;
+		throw new RuntimeException("not yet defined");
 	}
 	
 	public int getHours() {

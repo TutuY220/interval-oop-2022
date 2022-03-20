@@ -4,7 +4,7 @@ public class PaddleState {
 	// TODO: implement
 	private Vector size;
 	private Point center;
-	private Vector move = new Vector(1000,0);
+	private Vector move = new Vector(100,0);
 	public PaddleState() {
 		
 	}
@@ -28,8 +28,11 @@ public class PaddleState {
 	}
 	public void movePaddleLeft() {
 		center = this.center.minus(move);
+		System.out.println(getCenter());
 	}
 	public void movePaddleRight() {
 		center = this.center.plus(move);
+		System.out.println(getCenter());
+
 	}
 }
